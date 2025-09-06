@@ -1,0 +1,40 @@
+name: 'AI-Powered Baseline Feature Advisor'
+description: 'Scan code for non-Baseline web APIs and get AI-powered suggestions'
+author: 'Baseline Feature Advisor'
+
+inputs:
+  scan-path:
+    description: 'Path to scan for web API usage'
+    required: true
+    default: './src'
+  fail-on-issues:
+    description: 'Fail the build if non-Baseline APIs are found'
+    required: false
+    default: 'false'
+  generate-report:
+    description: 'Generate HTML report'
+    required: false
+    default: 'true'
+  ai-suggestions:
+    description: 'Enable AI-powered suggestions'
+    required: false
+    default: 'true'
+  openai-api-key:
+    description: 'OpenAI API key for AI suggestions'
+    required: false
+
+outputs:
+  issues-found:
+    description: 'Whether any issues were found'
+  total-issues:
+    description: 'Total number of issues found'
+  report-path:
+    description: 'Path to the generated report'
+
+runs:
+  using: 'node20'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'shield'
+  color: 'blue'
