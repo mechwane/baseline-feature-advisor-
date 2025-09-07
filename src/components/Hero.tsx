@@ -118,23 +118,6 @@ const Hero = () => {
               ))}
             </div>
 
-            {/* Feature Detail Sections */}
-            <section id="baseline-safety" className="mt-24 max-w-4xl mx-auto text-left">
-              <h2 className="text-2xl font-semibold mb-3">Baseline Safety</h2>
-              <p className="text-muted-foreground">Detect unsafe or non‑Baseline web APIs and get safe, widely-supported alternatives with clear fix instructions.</p>
-            </section>
-            <section id="ai-powered" className="mt-16 max-w-4xl mx-auto text-left">
-              <h2 className="text-2xl font-semibold mb-3">AI-Powered</h2>
-              <p className="text-muted-foreground">Contextual, AI-generated guidance to modernize your code while preserving behavior.</p>
-            </section>
-            <section id="ide-integration" className="mt-16 max-w-4xl mx-auto text-left">
-              <h2 className="text-2xl font-semibold mb-3">IDE Integration</h2>
-              <p className="text-muted-foreground">Get instant feedback inside VSCode with hover details and quick-fix suggestions.</p>
-            </section>
-            <section id="cicd-ready" className="mt-16 max-w-4xl mx-auto text-left">
-              <h2 className="text-2xl font-semibold mb-3">CI/CD Ready</h2>
-              <p className="text-muted-foreground">Run automatic scans in GitHub Actions and publish HTML reports for every PR.</p>
-            </section>
           </div>
         </main>
       </div>

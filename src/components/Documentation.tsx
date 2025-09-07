@@ -436,6 +436,7 @@ const Documentation = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 className="bg-gradient-primary hover:shadow-glow transition-all duration-300"
+                onClick={() => window.location.href = '/'}
               >
                 Try Code Scanner
                 <ArrowRight className="h-4 w-4 ml-2" />
@@ -443,6 +444,11 @@ const Documentation = () => {
               <Button 
                 variant="outline"
                 className="border-primary/20 hover:border-primary/40"
+                onClick={() => {
+                  const element = document.querySelector('[value="getting-started"]') as HTMLElement;
+                  element?.click();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
               >
                 View Integration Guides
               </Button>
