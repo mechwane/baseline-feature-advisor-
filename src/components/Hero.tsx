@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ArrowRight, Zap, Shield, Code, GitBranch } from "lucide-react";
 import CodeScanner from "./CodeScanner";
 
@@ -9,21 +11,25 @@ const Hero = () => {
 
   const features = [
     {
+      id: "baseline-safety",
       icon: <Shield className="h-5 w-5" />,
       title: "Baseline Safety",
       description: "Detect unsafe web APIs and ensure cross-browser compatibility"
     },
     {
+      id: "ai-powered",
       icon: <Zap className="h-5 w-5" />,
       title: "AI-Powered",
       description: "Get intelligent suggestions for modern, compatible alternatives"
     },
     {
+      id: "ide-integration",
       icon: <Code className="h-5 w-5" />,
       title: "IDE Integration",
       description: "Real-time warnings and suggestions directly in VSCode"
     },
     {
+      id: "cicd-ready",
       icon: <GitBranch className="h-5 w-5" />,
       title: "CI/CD Ready",
       description: "GitHub Actions integration for automated compatibility checks"
@@ -43,13 +49,16 @@ const Hero = () => {
       
       <div className="relative z-10">
         <header className="flex items-center justify-between p-6 max-w-7xl mx-auto">
-          <div className="flex items-center space-x-2">
-            <div className="h-8 w-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <Shield className="h-4 w-4 text-primary-foreground" />
+          <div className="flex items-center space-x-4">
+            <SidebarTrigger />
+            <div className="flex items-center space-x-2">
+              <div className="h-8 w-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+                <Shield className="h-4 w-4 text-primary-foreground" />
+              </div>
+              <span className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
+                Baseline Advisor
+              </span>
             </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-foreground to-foreground/80 bg-clip-text text-transparent">
-              Baseline Advisor
-            </span>
           </div>
           <div className="flex items-center space-x-4">
             <Badge variant="secondary" className="animate-glow">
@@ -85,8 +94,8 @@ const Hero = () => {
                 Try Code Scanner
                 <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button variant="outline" size="lg" className="border-primary/20 hover:border-primary/40">
-                View Documentation
+              <Button variant="outline" size="lg" className="border-primary/20 hover:border-primary/40" asChild>
+                <Link to="/documentation">View Documentation</Link>
               </Button>
             </div>
 
@@ -94,7 +103,12 @@ const Hero = () => {
               {features.map((feature, index) => (
                 <div 
                   key={index}
-                  className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 text-center hover:shadow-card transition-all duration-300 group"
+                  id={feature.id}
+                  className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-6 text-center hover:shadow-card transition-all duration-300 group cursor-pointer"
+                  onClick={() => {
+                    const element = document.getElementById(feature.id);
+                    element?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                 >
                   <div className="w-12 h-12 bg-gradient-primary rounded-lg flex items-center justify-center mx-auto mb-4 group-hover:animate-pulse">
                     {feature.icon}
