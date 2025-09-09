@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-
+import fetch from 'node-fetch';
 interface AISuggestion {
     alternative: string;
     explanation: string;

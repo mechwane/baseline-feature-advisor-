@@ -128,6 +128,6 @@ function updateDiagnostics(document: vscode.TextDocument, issues: any[]) {
     diagnosticCollection.set(document.uri, diagnostics);
 }
 
-export function deactivate() {
+export function deactivate(): void {
     diagnosticCollection.dispose();
 }

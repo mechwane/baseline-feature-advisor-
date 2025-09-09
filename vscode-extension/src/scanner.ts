@@ -103,11 +103,12 @@ export class BaselineScanner {
                 locations: true
             });
             
+            const self = this;
             simple(ast, {
                 MemberExpression(node: any) {
-                    const apiCall = this.getAPICall(node);
-                    if (apiCall && this.nonBaselineAPIs.has(apiCall)) {
-                        const apiInfo = this.nonBaselineAPIs.get(apiCall);
+                    const apiCall = self.getAPICall(node);
+                    if (apiCall && self.nonBaselineAPIs.has(apiCall)) {
+                        const apiInfo = self.nonBaselineAPIs.get(apiCall);
                         issues.push({
                             api: apiCall,
                             line: node.loc.start.line,
@@ -121,9 +122,9 @@ export class BaselineScanner {
                     }
                 },
                 CallExpression(node: any) {
-                    const apiCall = this.getAPICall(node.callee);
-                    if (apiCall && this.nonBaselineAPIs.has(apiCall)) {
-                        const apiInfo = this.nonBaselineAPIs.get(apiCall);
+                    const apiCall = self.getAPICall(node.callee);
+                    if (apiCall && self.nonBaselineAPIs.has(apiCall)) {
+                        const apiInfo = self.nonBaselineAPIs.get(apiCall);
                         issues.push({
                             api: apiCall,
                             line: node.loc.start.line,
