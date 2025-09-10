@@ -22,6 +22,12 @@ interface APIInfo {
     suggestion?: string;
 }
 
+type WebFeature = {
+    status?: { baseline?: boolean; baseline_low_date?: any };
+    compat_features?: string[];
+    [key: string]: any;
+};
+
 export class BaselineScanner {
     private nonBaselineAPIs: Map<string, any>;
     
@@ -32,14 +38,15 @@ export class BaselineScanner {
     
     private loadWebFeatures() {
         // Load web-features data and identify non-Baseline APIs
-        for (const [featureId, feature] of Object.entries(webFeatures as any)) {
+        for (const [featureId, featureRaw] of Object.entries(webFeatures as any)) {
+            const feature = featureRaw as WebFeature;
             if (feature.status?.baseline === false || feature.status?.baseline_low_date === undefined) {
                 // Extract API names from the feature
                 if (feature.compat_features) {
                     feature.compat_features.forEach((apiName: string) => {
                         this.nonBaselineAPIs.set(apiName, {
                             featureId,
-                            ...feature,
+                            ...(feature as object),
                             apiName
                         });
                     });
@@ -114,8 +121,8 @@ export class BaselineScanner {
                             line: node.loc.start.line,
                             column: node.loc.start.column,
                             type: apiInfo.status === 'deprecated' ? 'deprecated' : 'non-baseline',
-                            description: `${apiCall} is not Baseline-supported`,
-                            suggestion: apiInfo.suggestion || 'Consider using a Baseline-supported alternative',
+                            description: `${apiCall} is not Modern API Mentor-supported`,
+                            suggestion: apiInfo.suggestion || 'Consider using a Modern API Mentor-supported alternative',
                             browserSupport: apiInfo.browserSupport || 'Limited browser support',
                             status: apiInfo.status || 'non-baseline'
                         });
@@ -130,8 +137,8 @@ export class BaselineScanner {
                             line: node.loc.start.line,
                             column: node.loc.start.column,
                             type: apiInfo.status === 'deprecated' ? 'deprecated' : 'non-baseline',
-                            description: `${apiCall} is not Baseline-supported`,
-                            suggestion: apiInfo.suggestion || 'Consider using a Baseline-supported alternative',
+                            description: `${apiCall} is not Modern API Mentor-supported`,
+                            suggestion: apiInfo.suggestion || 'Consider using a Modern API Mentor-supported alternative',
                             browserSupport: apiInfo.browserSupport || 'Limited browser support',
                             status: apiInfo.status || 'non-baseline'
                         });
@@ -214,7 +221,7 @@ export class BaselineScanner {
         
         return {
             isBaseline: true,
-            browserSupport: 'Baseline supported',
+            browserSupport: 'Modern API Mentor supported',
             status: 'stable'
         };
     }
@@ -258,12 +265,12 @@ export class BaselineScanner {
                         
                         return new vscode.Diagnostic(
                             range,
-                            `${issue.api} is not Baseline-supported. ${issue.suggestion}`,
+                            `${issue.api} is not Modern API Mentor-supported. ${issue.suggestion}`,
                             vscode.DiagnosticSeverity.Warning
                         );
                     });
                     
-                    vscode.languages.createDiagnosticCollection('baselineAdvisor')
+                    vscode.languages.createDiagnosticCollection('modernApiMentor')
                         .set(document.uri, diagnostics);
                 }
             } catch (error) {

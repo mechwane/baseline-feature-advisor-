@@ -1,13 +1,19 @@
 {
   "name": "baseline-feature-advisor",
   "displayName": "AI-Powered Baseline Feature Advisor",
-  "description": "Detect unsafe web APIs and get AI-powered suggestions for Baseline-supported alternatives",
-  "version": "1.0.0",
-  "publisher": "baseline-advisor",
+  "description": "Detect unsafe web APIs and get AI-powered suggestions for Baseline-supported alternatives.",
+  "version": "1.0.1",
+  "publisher": "Algma-Tech", 
+  "author": {
+    "name": "Adam Adekanye Adewale (Algma Tech)",
+    "email": "adamadekanye941@gmail.com"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/baseline-feature-advisor"
+    "url": "https://github.com/mechwane/baseline-feature-advisor"
   },
+  "icon": "adam.png",
+  "license": "MIT",
   "engines": {
     "vscode": "^1.74.0"
   },
@@ -21,7 +27,8 @@
     "compatibility",
     "api",
     "scanner",
-    "ai"
+    "ai",
+    "security"
   ],
   "activationEvents": [
     "onLanguage:javascript",
