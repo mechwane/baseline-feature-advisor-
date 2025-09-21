@@ -41,7 +41,6 @@ export class BaselineScanner {
         for (const [featureId, featureRaw] of Object.entries(webFeatures as any)) {
             const feature = featureRaw as WebFeature;
             if (feature.status?.baseline === false || feature.status?.baseline_low_date === undefined) {
-                // Extract API names from the feature
                 if (feature.compat_features) {
                     feature.compat_features.forEach((apiName: string) => {
                         this.nonBaselineAPIs.set(apiName, {
@@ -75,9 +74,31 @@ export class BaselineScanner {
                 suggestion: 'Use navigator.mediaDevices.getUserMedia instead',
                 status: 'deprecated',
                 browserSupport: 'Use the standard getUserMedia API'
+            },
+
+            // 👇 Extra unsafe/deprecated APIs for testing
+            'document.write': {
+                suggestion: 'Avoid document.write(); use DOM APIs like appendChild instead',
+                status: 'unsafe',
+                browserSupport: 'Works, but blocked in many cases'
+            },
+            'eval': {
+                suggestion: 'Avoid eval(); use JSON.parse or safer alternatives',
+                status: 'unsafe',
+                browserSupport: 'Discouraged in all modern browsers'
+            },
+            'innerHTML': {
+                suggestion: 'Use textContent or DOM manipulation APIs instead',
+                status: 'unsafe',
+                browserSupport: 'Prone to XSS attacks'
+            },
+            'alert': {
+                suggestion: 'Use console.log or a custom UI instead',
+                status: 'deprecated',
+                browserSupport: 'Not recommended for production'
             }
         };
-        
+
         for (const [api, info] of Object.entries(manualAPIs)) {
             this.nonBaselineAPIs.set(api, info);
         }
@@ -120,7 +141,11 @@ export class BaselineScanner {
                             api: apiCall,
                             line: node.loc.start.line,
                             column: node.loc.start.column,
-                            type: apiInfo.status === 'deprecated' ? 'deprecated' : 'non-baseline',
+                            type: apiInfo.status === 'deprecated' 
+                                ? 'deprecated' 
+                                : apiInfo.status === 'unsafe'
+                                ? 'unsafe'
+                                : 'non-baseline',
                             description: `${apiCall} is not Modern API Mentor-supported`,
                             suggestion: apiInfo.suggestion || 'Consider using a Modern API Mentor-supported alternative',
                             browserSupport: apiInfo.browserSupport || 'Limited browser support',
@@ -136,7 +161,11 @@ export class BaselineScanner {
                             api: apiCall,
                             line: node.loc.start.line,
                             column: node.loc.start.column,
-                            type: apiInfo.status === 'deprecated' ? 'deprecated' : 'non-baseline',
+                            type: apiInfo.status === 'deprecated' 
+                                ? 'deprecated' 
+                                : apiInfo.status === 'unsafe'
+                                ? 'unsafe'
+                                : 'non-baseline',
                             description: `${apiCall} is not Modern API Mentor-supported`,
                             suggestion: apiInfo.suggestion || 'Consider using a Modern API Mentor-supported alternative',
                             browserSupport: apiInfo.browserSupport || 'Limited browser support',
@@ -155,7 +184,6 @@ export class BaselineScanner {
     private async scanHTML(html: string): Promise<APIIssue[]> {
         const issues: APIIssue[] = [];
         
-        // Simple regex-based scanning for HTML
         const scriptRegex = /<script[^>]*>([\s\S]*?)<\/script>/gi;
         let match;
         
@@ -163,7 +191,6 @@ export class BaselineScanner {
             const scriptContent = match[1];
             const scriptIssues = await this.scanJavaScript(scriptContent);
             
-            // Adjust line numbers based on script tag position
             const beforeScript = html.substring(0, match.index);
             const lineOffset = (beforeScript.match(/\n/g) || []).length;
             
@@ -239,9 +266,7 @@ export class BaselineScanner {
         let filesWithIssues = 0;
         
         for (let i = 0; i < files.length; i++) {
-            if (token.isCancellationRequested) {
-                break;
-            }
+            if (token.isCancellationRequested) break;
             
             const file = files[i];
             progress.report({
@@ -256,7 +281,7 @@ export class BaselineScanner {
                 if (issues.length > 0) {
                     totalIssues += issues.length;
                     filesWithIssues++;
-                    // Update diagnostics for this file
+                    
                     const diagnostics: vscode.Diagnostic[] = issues.map(issue => {
                         const range = new vscode.Range(
                             new vscode.Position(issue.line - 1, issue.column),

@@ -2,7 +2,7 @@
   "name": "baseline-feature-advisor",
   "displayName": "AI-Powered Baseline Feature Advisor",
   "description": "Detect unsafe web APIs and get AI-powered suggestions for Baseline-supported alternatives.",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "publisher": "Algma-Tech", 
   "author": {
     "name": "Adam Adekanye Adewale (Algma Tech)",
